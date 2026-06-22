@@ -10,7 +10,7 @@ metadata:
 allowed-tools: read write edit bash glob grep skill
 ---
 
-# AwareCode — Coding Awareness Protocol
+# AwareCode 鈥?Coding Awareness Protocol
 
 ## Core Principle
 
@@ -40,13 +40,13 @@ AwareCode is a meta-skill that governs how code is written, not what code is wri
 |-------|------|------|
 | **1. Context Scan** | Before writing code | Read project docs, search existing patterns, verify dependencies |
 | **2. Error Memory** | When errors are reported | Analyze root cause, log it, avoid repetition |
-| **3. Quality Review** | After writing code | Check correctness, performance, security, test coverage |
+| **3. Quality Review** | After writing code | Check correctness, performance, security, tests |
 | **4. Doc Sync** | After quality review | Update comments, README, CHANGELOG |
 | **5. Summary** | End of each change | Output structured summary in clear language |
 
 ---
 
-## Phase 1 — Context Scan
+## Phase 1 鈥?Context Scan
 
 Execute this phase before writing or modifying any code.
 
@@ -56,20 +56,20 @@ Read the following files (in priority order):
 
 ```
 HIGH PRIORITY (always check):
-  AGENTS.md / CLAUDE.md          — Project rules, architecture, conventions
-  opencode.json / opencode.jsonc — Provider, model, custom commands
-  README.md                      — Project overview and setup
+  AGENTS.md / CLAUDE.md          鈥?Project rules, architecture, conventions
+  opencode.json / opencode.jsonc 鈥?Provider, model, custom commands
+  README.md                      鈥?Project overview and setup
 
 MEDIUM PRIORITY (check when relevant):
-  package.json / Cargo.toml / requirements.txt / go.mod — Dependencies
-  tsconfig.json / .editorconfig / .eslintrc / .prettierrc — Tool config
-  Makefile / Justfile / Taskfile — Build commands
-  Dockerfile / docker-compose.yml — Container setup
+  package.json / Cargo.toml / requirements.txt / go.mod 鈥?Dependencies
+  tsconfig.json / .editorconfig / .eslintrc / .prettierrc 鈥?Tool config
+  Makefile / Justfile / Taskfile 鈥?Build commands
+  Dockerfile / docker-compose.yml 鈥?Container setup
 
 LOW PRIORITY (check for large/team projects):
-  CONTRIBUTING.md — Contribution guidelines
-  docs/ directory — Additional documentation
-  .github/ — CI/CD workflows
+  CONTRIBUTING.md 鈥?Contribution guidelines
+  docs/ directory 鈥?Additional documentation
+  .github/ 鈥?CI/CD workflows
 ```
 
 ### Step 2: Pattern Search
@@ -110,7 +110,7 @@ Before writing, ask yourself:
 
 ---
 
-## Phase 2 — Error Memory
+## Phase 2 鈥?Error Memory
 
 Execute this phase when the user reports an error or unexpected behavior.
 
@@ -126,7 +126,7 @@ ERROR:
 ROOT CAUSE:
   Category: <see table below>
   Details: <what went wrong>
-  Why: <why I wrote it this way — false assumption? missed context?>
+  Why: <why I wrote it this way 鈥?false assumption? missed context?>
 ```
 
 #### Root Cause Categories
@@ -151,8 +151,8 @@ Maintain an error log for the duration of the session:
 
 ```
 [ERROR LOG]
-#1 [TypeMismatch] src/utils/format.ts:15 — passed string to calculateTotal which expects number → cast with Number()
-#2 [LibraryAssumption] src/server.ts — assumed express is installed, project uses hono → rewrote with hono routing
+#1 [TypeMismatch] src/utils/format.ts:15 鈥?passed string to calculateTotal which expects number 鈫?cast with Number()
+#2 [LibraryAssumption] src/server.ts 鈥?assumed express is installed, project uses hono 鈫?rewrote with hono routing
 ```
 
 Before each subsequent code generation, scan this log for relevant past mistakes.
@@ -170,11 +170,11 @@ If the error reveals a pattern (e.g., "this project uses Result types not except
 
 ---
 
-## Phase 3 — Quality Review
+## Phase 3 鈥?Quality Review
 
 Execute this phase after writing or modifying code, before syncing documentation.
 
-### Section A — Correctness
+### Section A 鈥?Correctness
 
 - [ ] Does the code handle the "happy path" correctly?
 - [ ] Does the code handle edge cases? (empty input, null, max values)
@@ -182,7 +182,7 @@ Execute this phase after writing or modifying code, before syncing documentation
 - [ ] Are there any unhandled rejections or uncaught exceptions?
 - [ ] Are there any race conditions or timing issues?
 
-### Section B — Performance
+### Section B 鈥?Performance
 
 - [ ] Hot path check: is this code called frequently? If so:
   - Avoid unnecessary allocations in loops
@@ -192,10 +192,10 @@ Execute this phase after writing or modifying code, before syncing documentation
   - Batch operations instead of individual calls
   - Consider caching for repeated reads
   - Use connection pooling
-- [ ] Algorithm check: is this O(n²) or worse for potentially large inputs?
+- [ ] Algorithm check: is this O(n虏) or worse for potentially large inputs?
 - [ ] Memory check: are there leaks from closures, listeners, or large retained objects?
 
-### Section C — Security
+### Section C 鈥?Security
 
 - [ ] User input: is it validated, sanitized, and escaped?
   - SQL: use parameterized queries, not string concatenation
@@ -206,15 +206,27 @@ Execute this phase after writing or modifying code, before syncing documentation
 - [ ] Secrets: no API keys, tokens, or passwords in code or logs
 - [ ] Dependencies: is the code using known-unsafe patterns?
 
-### Section D — Testing
+### Section D 鈥?Testing
 
 - [ ] Does the project have tests, and do they pass?
-- [ ] Should I add tests for this change?
-- [ ] Have I run the tests to verify nothing is broken?
+- [ ] Have I run the full test suite?
+- [ ] New feature 鈫?added at least one happy-path test
+- [ ] Bug fix 鈫?added a regression test to prevent recurrence
+- [ ] Refactor 鈫?existing tests cover the change
+- [ ] Hot path change 鈫?consider adding a benchmark
+- [ ] Did I run the linter if the project has one?
+
+**Test command reference (check which applies):**
+- Node: `npm test` / `pnpm test` / `yarn test`
+- Python: `pytest` / `unittest`
+- Rust: `cargo test`
+- Go: `go test ./...`
+- Java: `./gradlew test` / `mvn test`
+- Godot: check project for test scene or GUT setup
 
 ---
 
-## Phase 4 — Doc Sync
+## Phase 4 鈥?Doc Sync
 
 Execute this phase after quality review.
 
@@ -242,11 +254,11 @@ Execute this phase after quality review.
 
 ---
 
-## Phase 5 — Summary
+## Phase 5 鈥?Summary
 
 Output a structured summary after every code change.
 
-### Template (English — default)
+### Template (English 鈥?default)
 
 ```
 ## Change Summary
@@ -267,30 +279,28 @@ Output a structured summary after every code change.
 - <security considerations, if applicable>
 ```
 
-### Template (中文)
+### Template (涓枃)
 
 ```
-## 变更总结
+## 鍙樻洿鎬荤粨
 
-### 做了什么
-- <简述本次改动的核心内容>
+### 鍋氫簡浠€涔?- <绠€杩版湰娆℃敼鍔ㄧ殑鏍稿績鍐呭>
 
-### 参考依据
-- <参考了哪些文件/模式/文档>
+### 鍙傝€冧緷鎹?- <鍙傝€冧簡鍝簺鏂囦欢/妯″紡/鏂囨。>
 
-### 注意事项
-- <需要留意的点、后续步骤、已知限制>
+### 娉ㄦ剰浜嬮」
+- <闇€瑕佺暀鎰忕殑鐐广€佸悗缁楠ゃ€佸凡鐭ラ檺鍒?
 
-### 性能考量
-- <性能优化点或权衡（如适用）>
+### 鎬ц兘鑰冮噺
+- <鎬ц兘浼樺寲鐐规垨鏉冭　锛堝閫傜敤锛?
 
-### 安全考量
-- <安全相关的注意事项（如适用）>
+### 瀹夊叏鑰冮噺
+- <瀹夊叏鐩稿叧鐨勬敞鎰忎簨椤癸紙濡傞€傜敤锛?
 ```
 
 ### Rules
 
-1. Use clear, concise language — the user should understand the change in 10 seconds
+1. Use clear, concise language 鈥?the user should understand the change in 10 seconds
 2. Be honest about trade-offs and limitations
 3. If the change affects other parts of the system, mention it
 4. Use the template that matches the user's language preference (default: English)
