@@ -9,11 +9,14 @@ AwareCode is a meta-skill: it governs *how* code is written, not *what* code is 
 
 ## Features
 
-- **Context Scan** — Reads AGENTS.md, package.json, existing files, and project conventions before writing a single line
-- **Error Memory** — Analyzes root causes, logs them for the session, and avoids repeating the same mistake
-- **Quality Review** — Checks correctness, performance, security, and test coverage after every change
-- **Doc Sync** — Updates inline comments, README, and CHANGELOG when code changes
-- **Action Summary** — Outputs a structured summary after each change (what, why, trade-offs)
+- **Change Classification** 鈥?Auto-detects small vs large changes; lightweight mode skips heavy review for trivial edits
+- **Project Type Detection** 鈥?Automatically identifies project type (Godot, Rust, Node, Python, Go, etc.) from root files
+- **Context Scan** 鈥?Reads AGENTS.md, package.json, existing files, and project conventions before writing a single line
+- **Error Memory** 鈥?Analyzes root causes, logs them for the session, and persists to `references/errors.md` for cross-session recall
+- **Quality Review** 鈥?Checks correctness, performance, security, and test coverage after every change
+- **Doc Sync** 鈥?Updates inline comments, README, and CHANGELOG when code changes
+- **Rollback** 鈥?Structured recovery protocol when things go wrong
+- **Action Summary** 鈥?Outputs a structured summary after each change (what, why, trade-offs)
 
 ## Installation
 
@@ -67,18 +70,18 @@ The skill speaks in clear, structured summaries after each change. If you prefer
 
 ```
 aware-code/
-├── SKILL.md                  # Main protocol (five phases)
-├── LICENSE                   # MIT
-├── README.md                 # This file
-├── CHANGELOG.md              # Release history
-├── references/
-│   ├── patterns.md           # Code patterns and conventions checklist
-│   ├── errors.md             # Error memory templates and root cause catalog
-│   ├── performance.md        # Performance optimization by domain
-│   ├── security.md           # Security checklist by vulnerability class
-│   └── workflow.md           # Advanced workflow patterns with OpenCode
-└── examples/
-    └── basic.md              # Usage scenarios
+鈹溾攢鈹€ SKILL.md                  # Main protocol (five phases)
+鈹溾攢鈹€ LICENSE                   # MIT
+鈹溾攢鈹€ README.md                 # This file
+鈹溾攢鈹€ CHANGELOG.md              # Release history
+鈹溾攢鈹€ references/
+鈹?  鈹溾攢鈹€ patterns.md           # Code patterns and conventions checklist
+鈹?  鈹溾攢鈹€ errors.md             # Error memory templates and root cause catalog
+鈹?  鈹溾攢鈹€ performance.md        # Performance optimization by domain
+鈹?  鈹溾攢鈹€ security.md           # Security checklist by vulnerability class
+鈹?  鈹斺攢鈹€ workflow.md           # Advanced workflow patterns with OpenCode
+鈹斺攢鈹€ examples/
+    鈹斺攢鈹€ basic.md              # Usage scenarios
 ```
 
 ## Compatibility
