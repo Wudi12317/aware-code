@@ -2,6 +2,9 @@
 
 **A coding awareness protocol for AI agents.** Before writing code, scan project context and existing patterns. When errors occur, learn from them. After changes, review quality, sync docs, and summarize.
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Agent Skills](https://img.shields.io/badge/Agent%20Skills-Compatible-6A4EFF)](https://agentskills.io)
+
 AwareCode is a meta-skill: it governs *how* code is written, not *what* code is written about. It works alongside domain-specific skills (React, Godot, SQL, etc.) to ensure every code change is context-aware, learns from mistakes, and leaves documentation in a healthy state.
 
 ## Features
@@ -14,25 +17,30 @@ AwareCode is a meta-skill: it governs *how* code is written, not *what* code is 
 
 ## Installation
 
-### Global (recommended)
+### Via npx skills (easiest)
 
 ```bash
-git clone https://github.com/<your-org>/aware-code.git
-cp -r aware-code ~/.config/opencode/skills/aware-code
+npx skills add Wudi12317/aware-code
 ```
 
-Or create a symlink to stay updated:
+### Global (manual)
 
 ```bash
-ln -s $(pwd)/aware-code ~/.config/opencode/skills/aware-code
+git clone https://github.com/Wudi12317/aware-code.git
+cp -r aware-code ~/.config/opencode/skills/aware-code
 ```
 
 ### Per-project
 
-Place the skill in your project's `.opencode/skills/` directory:
-
 ```bash
 cp -r aware-code .opencode/skills/aware-code
+```
+
+### Windows
+
+```powershell
+git clone https://github.com/Wudi12317/aware-code.git
+Copy-Item -Recursive aware-code "$env:USERPROFILE\.config\opencode\skills\aware-code"
 ```
 
 ### Verify
@@ -82,6 +90,7 @@ AwareCode follows the [Agent Skills](https://agentskills.io) standard and is com
 - OpenAI Codex
 - Cursor
 - Windsurf
+- GitHub Copilot
 - Any other tool supporting the Agent Skills format
 
 ## License
