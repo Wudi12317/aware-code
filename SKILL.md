@@ -1,6 +1,6 @@
 ---
 name: aware-code
-description: "Use when writing or modifying code. Scans project context and conventions before changes, learns from errors, reviews quality (correctness, performance, security, tests), syncs docs, and outputs structured summaries. Do NOT use for purely conversational tasks or quick drafts where review is explicitly skipped."
+description: "Use when writing or modifying code. Scans project context and conventions before changes, auto-detects project type (Godot/Rust/Node/Python/etc.), learns from errors with cross-session persistence, reviews quality (correctness, performance, security, tests), syncs docs, and outputs structured summaries. Supports lightweight mode for small changes and rollback for recovery. Do NOT use for purely conversational tasks or quick drafts where review is explicitly skipped."
 license: MIT
 compatibility: opencode
 metadata:
@@ -16,7 +16,7 @@ allowed-tools: read write edit bash glob grep skill
 
 **Aware before you act. Learn from every mistake.**
 
-AwareCode is a meta-skill that governs how code is written, not what code is written. It enforces a five-phase protocol that runs before, during, and after every code change.
+AwareCode is a meta-skill that governs how code is written, not what code is written. It enforces a five-phase protocol that runs before, during, and after every code change. Small changes (typos, comments, config tweaks) use a lightweight mode that skips heavy review steps.
 
 ### When to use
 
@@ -38,9 +38,10 @@ AwareCode is a meta-skill that governs how code is written, not what code is wri
 
 | Phase | When | What |
 |-------|------|------|
-| **1. Context Scan** | Before writing code | Read project docs, search existing patterns, verify dependencies |
-| **2. Error Memory** | When errors are reported | Analyze root cause, log it, avoid repetition |
-| **3. Quality Review** | After writing code | Check correctness, performance, security, tests |
+| **0. Classify** | Before everything | Small change 鈫?lightweight mode; Large change 鈫?full protocol |
+| **1. Context Scan** | Before writing code | Detect project type, read docs, search patterns, verify dependencies |
+| **2. Error Memory** | When errors are reported | Analyze root cause, log it (session + file), avoid repetition |
+| **3. Quality Review** | After writing code | Check correctness, performance, security, tests (with timeout) |
 | **4. Doc Sync** | After quality review | Update comments, README, CHANGELOG |
 | **5. Summary** | End of each change | Output structured summary in clear language |
 
@@ -50,7 +51,45 @@ AwareCode is a meta-skill that governs how code is written, not what code is wri
 
 Execute this phase before writing or modifying any code.
 
-### Step 1: Project Context
+### Step 0: Classify the Change
+
+Determine the scope to choose full or lightweight mode:
+
+```
+Small change (lightweight mode):
+  - Typo fixes, comment updates, config tweaks
+  - Single-line changes
+  - Skip: pattern search, design awareness, quality review
+  - Do: quick scan of AGENTS.md + README.md 鈫?write 鈫?doc sync 鈫?summary
+
+Large change (full mode):
+  - New features, bug fixes, refactors
+  - Cross-file modifications, API changes
+  - Execute all steps below
+```
+
+### Step 1: Detect Project Type
+
+Auto-detect the project type to apply relevant conventions:
+
+```
+Check references/preferences.md first for manual override.
+If not set, detect from project root:
+
+  project.godot / *.tscn          鈫?Godot
+  Cargo.toml                      鈫?Rust
+  go.mod                          鈫?Go
+  package.json                    鈫?Node / TypeScript (check for React/Vue/Solid)
+  pubspec.yaml                    鈫?Flutter / Dart
+  CMakeLists.txt                  鈫?C / C++ (CMake)
+  pyproject.toml / requirements.txt 鈫?Python
+  Gemfile                         鈫?Ruby
+  mix.exs                         鈫?Elixir
+  *.sln / *.csproj                鈫?.NET / C#
+  pom.xml / build.gradle          鈫?Java (Maven/Gradle)
+```
+
+### Step 2: Project Context
 
 Read the following files (in priority order):
 
@@ -72,7 +111,7 @@ LOW PRIORITY (check for large/team projects):
   .github/ 鈥?CI/CD workflows
 ```
 
-### Step 2: Pattern Search
+### Step 3: Pattern Search
 
 Find and read 2-3 existing files related to your task:
 
@@ -87,7 +126,7 @@ Find and read 2-3 existing files related to your task:
   - **Testing**: framework used, file naming, assertion style
   - **Comments**: docstrings, inline, or minimal
 
-### Step 3: Dependency Verification
+### Step 4: Dependency Verification
 
 Never assume a library exists. Verify:
 
@@ -97,7 +136,7 @@ grep for <library-name> in package.json / Cargo.toml / imports in existing files
 
 If the library is not found, do not use it. Use what is already in the project, or ask the user before adding a new dependency.
 
-### Step 4: Design Awareness
+### Step 5: Design Awareness
 
 Before writing, ask yourself:
 
@@ -156,6 +195,20 @@ Maintain an error log for the duration of the session:
 ```
 
 Before each subsequent code generation, scan this log for relevant past mistakes.
+
+### Step 2.5: Persist to File (Cross-Session)
+
+If `references/errors.md` exists, append the error in YAML format:
+
+```yaml
+- date: 2026-06-22
+  category: TypeMismatch
+  file: src/utils/format.ts:15
+  description: passed string to calculateTotal which expects number
+  fix: cast with Number()
+```
+
+At the start of each new session, read `references/errors.md` to load historical error patterns.
 
 ### Step 3: Fix with Awareness
 
@@ -223,6 +276,11 @@ Execute this phase after writing or modifying code, before syncing documentation
 - Go: `go test ./...`
 - Java: `./gradlew test` / `mvn test`
 - Godot: check project for test scene or GUT setup
+
+**Timeout handling:**
+- If tests run longer than 30 seconds with no output 鈫?ask user if they want to wait
+- If tests run longer than 2 minutes 鈫?recommend manual test run, proceed with caution
+- Note the test status in the summary so the user knows verification is pending
 
 ---
 
@@ -304,6 +362,33 @@ Output a structured summary after every code change.
 2. Be honest about trade-offs and limitations
 3. If the change affects other parts of the system, mention it
 4. Use the template that matches the user's language preference (default: English)
+
+---
+
+## Rollback (Recovery Protocol)
+
+If a change causes problems, use this recovery flow:
+
+### Step 1: Revert Code
+
+```
+git checkout -- <file-path>          # Revert single file
+git revert <commit-hash> --no-edit   # Revert a specific commit
+git reset HEAD~1 --hard              # Undo last commit (destructive)
+```
+
+- Check if the project uses Git; if not, suggest manual backup before future changes
+- Confirm no other work is lost before reverting
+
+### Step 2: Clean Up Residuals
+
+- Remove newly created files that are no longer needed
+- Restore modified config files to their original state
+
+### Step 3: Log the Cause
+
+- Write the failure reason to `references/errors.md` to prevent recurrence
+- Consult this log before making similar changes in the future
 
 ---
 
