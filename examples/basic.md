@@ -22,24 +22,24 @@
 **AwareCode Phase 5 — Summary:**
 
 ```
-## 变更总结
+## Change Summary
 
-### 做了什么
-- 为用户列表添加了升序/降序排序切换，通过点击表头触发
+### What
+- Added ascending/descending sort toggle to the user list via column header click
 
-### 参考依据
-- 项目使用原生 Array.sort，无额外依赖
-- 排序逻辑参考了项目中 ContactsList 的现有实现
+### References
+- Project uses native Array.sort, no external dependency added
+- Sorting pattern follows the existing ContactsList component
 
-### 注意事项
-- 目前是客户端排序，数据量大（>10000条）时建议改服务端排序
+### Notes
+- Client-side sorting only; consider server-side sorting if data exceeds 10000 rows
 
-### 性能考量
-- O(n log n)，1000条以下无感知
-- 排序结果已用 useMemo 缓存，避免不必要的重排
+### Performance
+- O(n log n), imperceptible for <1000 items
+- Result memoized with useMemo to avoid unnecessary re-renders
 
-### 安全考量
-- 不涉及用户输入，无安全风险
+### Security
+- No user input involved, no security risk
 ```
 
 ## Example 2: Fixing a Bug
@@ -58,7 +58,7 @@ ERROR:
 ROOT CAUSE:
   Category: Silent Failure
   Details: API returns null on network error, code assumes response is always valid
-  Why: Didn't handle the error case for API failure
+  Why: Did not handle the error case for API failure
 
 FIX:
   Added null check before accessing response
@@ -68,17 +68,17 @@ FIX:
 **AwareCode Phase 5 — Summary:**
 
 ```
-## 变更总结
+## Change Summary
 
-### 做了什么
-- 修复了登录页在 API 返回 null 时的崩溃问题
-- 在访问 response.status 前增加了空值检查
+### What
+- Fixed login page crash when API returns null
+- Added null check before accessing response.status
 
-### 参考依据
-- 同一文件中的其他 API 调用已有类似检查，这次遗漏了
+### References
+- Other API calls in the same file already had similar checks; this one was missed
 
-### 注意事项
-- 建议给 API 客户端加全局响应拦截器，统一处理此类问题
+### Notes
+- Consider adding a global response interceptor to the API client to handle this uniformly
 ```
 
 ## Example 3: Refactoring
@@ -98,20 +98,19 @@ FIX:
 **AwareCode Phase 5 — Summary:**
 
 ```
-## 变更总结
+## Change Summary
 
-### 做了什么
-- 将 Login.tsx 中的认证逻辑提取到 src/hooks/useAuth.ts
-- useAuth 返回 { user, login, logout, isLoading, error }
-- 保持了与现有代码完全兼容的行为
+### What
+- Extracted authentication logic from Login.tsx into src/hooks/useAuth.ts
+- Returns { user, login, logout, isLoading, error }
 
-### 参考依据
-- 遵循了项目中 useUser 和 useSettings 的 hook 命名和返回模式
-- 函数签名和错误处理方式与现有 hooks 一致
+### References
+- Follows naming and return patterns from useUser and useSettings hooks
+- Error handling style matches existing hooks
 
-### 注意事项
-- Login.tsx 已更新使用新 hook，其他页面后续可复用
+### Notes
+- Login.tsx updated to use the new hook; other pages can reuse it later
 
-### 性能考量
-- login/logout 引用稳定（useCallback），不会触发子组件不必要重渲染
+### Performance
+- login/logout have stable references (useCallback), won't trigger unnecessary child re-renders
 ```

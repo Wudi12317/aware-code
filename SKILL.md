@@ -1,12 +1,13 @@
 ---
 name: aware-code
-description: "Comprehensive coding awareness protocol. Before writing code: scan project docs, existing patterns, and conventions. When errors occur: analyze root cause and remember it. After changes: review performance, sync docs, output a summary. Covers documentation, error memory, performance, security, and code review in one skill."
+description: "Use when writing or modifying code. Scans project context and conventions before changes, learns from errors, reviews quality (correctness, performance, security, tests), syncs docs, and outputs structured summaries. Do NOT use for purely conversational tasks or quick drafts where review is explicitly skipped."
 license: MIT
 compatibility: opencode
 metadata:
   audience: developers
   category: workflow
   version: 1.0.0
+allowed-tools: read write edit bash glob grep skill
 ---
 
 # AwareCode — Coding Awareness Protocol
@@ -16,6 +17,20 @@ metadata:
 **Aware before you act. Learn from every mistake.**
 
 AwareCode is a meta-skill that governs how code is written, not what code is written. It enforces a five-phase protocol that runs before, during, and after every code change.
+
+### When to use
+
+- Writing new code or modifying existing code
+- Debugging and fixing errors
+- Refactoring or restructuring code
+- Reviewing code quality
+
+### When NOT to use
+
+- Purely conversational questions (e.g., "explain concept X")
+- Quick drafts where the user explicitly says "no review needed"
+- Tasks that are entirely about reading/exploring without changing code
+- When the user asks for a brainstorming session without implementation
 
 ---
 
@@ -231,7 +246,28 @@ Execute this phase after quality review.
 
 Output a structured summary after every code change.
 
-### Template
+### Template (English — default)
+
+```
+## Change Summary
+
+### What
+- <brief description of what changed>
+
+### References
+- <files, patterns, or docs consulted>
+
+### Notes
+- <caveats, follow-up steps, known limitations>
+
+### Performance
+- <optimizations or trade-offs, if applicable>
+
+### Security
+- <security considerations, if applicable>
+```
+
+### Template (中文)
 
 ```
 ## 变更总结
@@ -257,6 +293,7 @@ Output a structured summary after every code change.
 1. Use clear, concise language — the user should understand the change in 10 seconds
 2. Be honest about trade-offs and limitations
 3. If the change affects other parts of the system, mention it
+4. Use the template that matches the user's language preference (default: English)
 
 ---
 
